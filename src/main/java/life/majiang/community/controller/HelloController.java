@@ -23,6 +23,6 @@ public class HelloController {
     public String hello(@RequestParam(name = "name") String name, Model model){// 按command+p可以提示需要传入的参数
         // 把数据传递给页面
         model.addAttribute("name",name);
-        return "hi";// 返回字符串指定逻辑视图名，通过视图解析器解析为物理视图地址，即/templates/hi.html，这样就与url中指定的hello文件资源名不同了，即可以不受请求的url绑定
+        return "index";// 返回字符串指定逻辑视图名，通过视图解析器解析为物理视图地址，即/templates/index.html，这样就与url中指定的hello文件资源名不同了，即可以不受请求的url绑定
     }
 }
