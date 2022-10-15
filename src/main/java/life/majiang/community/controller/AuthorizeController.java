@@ -41,6 +41,12 @@ public class AuthorizeController {
             request.getSession().setAttribute("user",user);
             System.out.println(user);
             // 希望登陆成功以后返回index页面
+            // 这里不能写redirect:index，或是写redirect:index.html
+            // 因为static文件夹以及templates文件夹是受保护的，也就是说这两个文件夹下的文件是无法通过url直接访问的，以至于在springmvc下使用重定向会报404
+            // 那么如何能够直接访问到html或者css呢？（这里尝试了public方法，仍然无法访问）
+            // 方法一:我们可以在resources下创建一个名为public的文件夹，顾名思义，放在此文件夹下的文件是共有的，可以直接通过url访问，当然也可以springmvc重定向访问啦。
+            // 方法二:在main下创建webapp文件夹，将文件放到此文件夹下，效果同上。
+            // 由于尝试了方法一失败了，所以这里采取其他方式来做，即通过重定向到另一个Controller，注解了@GetMapping("/")的方法中，再通过那个方法指定的逻辑视图index解析为物理视图地址/templates/index.html
             return "redirect:/";
         }
         else{
