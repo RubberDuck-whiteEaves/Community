@@ -2,6 +2,8 @@ package life.majiang.community.controller;
 
 import life.majiang.community.dto.AccessTokenDTO;
 import life.majiang.community.dto.GithubUser;
+import life.majiang.community.mapper.UserMapper;
+import life.majiang.community.model.User;
 import life.majiang.community.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 @Controller
 public class AuthorizeController {
@@ -24,6 +27,9 @@ public class AuthorizeController {
     private String clientSecret;
     @Value("${github.redirect.uri}")
     private String redirectURI;
+    
+    @Autowired
+    private UserMapper userMapper;
 
     @GetMapping("callback")
     public String callback(@RequestParam(name="code") String code,
@@ -35,11 +41,19 @@ public class AuthorizeController {
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setClient_secret(clientSecret);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
-        GithubUser user = githubProvider.getUser(accessToken);
-        if(user!=null){
+        GithubUser githubUser = githubProvider.getUser(accessToken);
+        if(githubUser!=null){
+            User user = new User();
+            // UUID:通用唯一识别码
+            user.setToken(UUID.randomUUID().toString());
+            user.setName(githubUser.getName());
+            user.setAccountID(String.valueOf(githubUser.getId()));
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
+            userMapper.insert(user);
             // 登陆成功，写cookie和session
-            request.getSession().setAttribute("user",user);
-            System.out.println(user);
+            request.getSession().setAttribute("user",githubUser);
+            System.out.println(githubUser);
             // 希望登陆成功以后返回index页面
             // 这里不能写redirect:index，或是写redirect:index.html
             // 因为static文件夹以及templates文件夹是受保护的，也就是说这两个文件夹下的文件是无法通过url直接访问的，以至于在springmvc下使用重定向会报404
