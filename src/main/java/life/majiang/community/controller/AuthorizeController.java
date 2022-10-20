@@ -68,7 +68,8 @@ public class AuthorizeController {
             // 可以实现的效果：
             // 1 在服务器未断开时，点击一次登录，则后续在同一个浏览器按刷新，或者反复访问index首页，都不会再显示登录，而会显示个人信息
             // 2 用户登出，前端重新显示登录按钮，然后在同一个浏览器中使用其他用户登录，可以正确地显示其他用户的个人信息
-            //   虽然默认情况下，一个浏览器独占一个session对象，但是在获取到新的githubUser时，仍然会通过getSession().setAttribute("user",githubUser)对Session中的用户进行覆盖，因此可以正确显示下一个登录用户的个人信息
+            //   虽然默认情况下，一个浏览器独占一个session对象（因为默认用来保存session的cookie在该域名下都有效，也就是说不论你访问什么资源，这个cookie ID都会被传送到服务器端，来获取"本浏览器"的session）
+            //   但是在获取到新的githubUser时，仍然会通过getSession().setAttribute("user",githubUser)对Session中的用户进行覆盖，因此可以正确显示下一个登录用户的个人信息
             // 无法完成的效果：
             // 1 服务器断开时，重启服务器（重启应用），用户需要重新登录（因为session是存储在这个application的内存中的，如果应用重启，则session消失），而实际上用户最好是感受不到服务器重启了，最好是不需重新登录
             //   用token存储在db中，再通过cookie传输，可以做到服务器重启，用户也不需要重新登录（只需要浏览器中的cookie未被清除即可）
