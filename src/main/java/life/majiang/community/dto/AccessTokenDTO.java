@@ -1,5 +1,6 @@
 package life.majiang.community.dto;
 
+// 申请AccessToken需要的参数信息
 public class AccessTokenDTO {
     private String client_id;
     private String client_secret;

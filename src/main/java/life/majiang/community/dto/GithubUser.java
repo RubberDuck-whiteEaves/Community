@@ -1,5 +1,6 @@
 package life.majiang.community.dto;
 
+// 在github第三方登陆中，获取的最终用户信息
 public class GithubUser {
     private String name;
     private Long id;

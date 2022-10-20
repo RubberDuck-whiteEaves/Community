@@ -13,6 +13,7 @@ import java.io.IOException;
 @Component
 // 希望GithubProvider提供Github第三方支持的能力
 public class GithubProvider {
+    // 通过AccessTokenDTO作为请求参数获取AccessToken
     public String getAccessToken(AccessTokenDTO accessTokenDTO){
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
 
@@ -35,6 +36,7 @@ public class GithubProvider {
         return null;
     }
 
+    // 通过AccessToken作为请求参数，获取GithubUser
     public GithubUser getUser(String accessToken){
         OkHttpClient client = new OkHttpClient();
         // 使用这种方式.url("https://api.github.com/user?aaccess_token="+accessToken)会报错，返回401，即要求填入Authorization字段
@@ -50,6 +52,9 @@ public class GithubProvider {
             Response response = client.newCall(request).execute();
             String string=response.body().string();
             // 将Json格式的String转化为一个java的类对象
+            // 在JSON.parseObject的时候，会去填充名称相同的属性。
+            // 对于Json字符串中没有，而类有的属性，会为null；
+            // 对于类没有，而Json字符串有的属性，不做任何处理，类不可能凭空出现一个属性来接收，使用时也不会报错。
             GithubUser githubUser = JSON.parseObject(string, GithubUser.class);
             return githubUser;
         } catch (IOException e) {
