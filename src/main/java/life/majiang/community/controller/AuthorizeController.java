@@ -50,7 +50,7 @@ public class AuthorizeController {
         accessTokenDTO.setClient_secret(clientSecret);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-        if(githubUser!=null){
+        if(githubUser!=null && githubUser.getId()!=null){
             // 获取授权成功
             User user = new User();
             // UUID:通用唯一识别码
@@ -61,6 +61,7 @@ public class AuthorizeController {
             user.setAccountID(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
+            user.setAvatarURL(githubUser.getAvatarURL());
             // 插入数据库的过程，相当于写入了session，即把"session"持久化了（用DB对实物的存储，代替了session的写入），则后续不必在写入session了
             userMapper.insert(user);
             // 这里光使用session来验证登陆是不可取的：

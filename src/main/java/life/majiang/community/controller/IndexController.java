@@ -19,7 +19,7 @@ public class IndexController {
         // 同时将user写入session，使得前端可以通过session来决定是展示个人信息还是登陆
         // 设置cookie是服务器通过response设置的，获取cookie是在浏览器发送给服务器的request请求中获取的
         Cookie[] cookies = request.getCookies();
-        if(cookies!=null){
+        if(cookies!=null&&cookies.length!=0){
             for(Cookie cookie:cookies){
                 if(cookie.getName().equals("token")){
                     String token=cookie.getValue();
