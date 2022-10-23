@@ -1,5 +1,6 @@
 package life.majiang.community.controller;
 
+import life.majiang.community.dto.PaginationDTO;
 import life.majiang.community.dto.QuestionDTO;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.User;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -20,9 +22,14 @@ public class IndexController {
 
     @Autowired
     private QuestionService questionService;
+
+    // page:当前页码
+    // size:一页size条question
     @GetMapping("/")
     public String index(HttpServletRequest request,
-                        Model model){
+                        Model model,
+                        @RequestParam(name="page",defaultValue = "1") Integer page,
+                        @RequestParam(name="size",defaultValue = "2") Integer size){
         // 首页中的逻辑：获取cookie中的token，在数据库中查询token是否存在，如果存在，则已经登陆成功，不会每次刷新首页都要求重新登陆
         // 同时将user写入session，使得前端可以通过session来决定是展示个人信息还是登陆
         // 设置cookie是服务器通过response设置的，获取cookie是在浏览器发送给服务器的request请求中获取的
@@ -40,11 +47,8 @@ public class IndexController {
             }
         }
 
-        List<QuestionDTO> questionDTOList=questionService.list();
-        for (QuestionDTO questionDTO : questionDTOList) {
-            questionDTO.setDescription("人生充满遗憾，失败贯穿始终");
-        }
-        model.addAttribute("questions",questionDTOList);
+        PaginationDTO pagination=questionService.list(page,size);
+        model.addAttribute("pagination",pagination);
         return "index";
     }
 }
