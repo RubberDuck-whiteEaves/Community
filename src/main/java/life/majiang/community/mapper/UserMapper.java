@@ -15,4 +15,7 @@ public interface UserMapper {
     // #{}:当形参为单个值（一般都是一个简单数据类型）时，#{}中写入形参名直接传递即可，不需要额外加@Param注解
     @Select("select * from user_info where token=#{token}")
     User findByToken(String token);
+
+    @Select("select * from user_info where id=#{id}")
+    User findByID(Integer id);
 }
