@@ -22,7 +22,7 @@ public class PublishController {
     @Autowired
     private UserMapper userMapper;
 
-    // get请求，通过该方法来处理，作用初步定为渲染页面（通过浏览器输入链接直接访问时，是get请求）
+    // get请求，通过该方法来处理，作用初步定为渲染页面（通过浏览器输入链接直接访问/a标签跳转时，是get请求）
     @GetMapping("/publish")
     public String publish(){
         return "publish";
