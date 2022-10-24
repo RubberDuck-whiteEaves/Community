@@ -22,7 +22,7 @@ public class PaginationDTO {
     // 总共totalPage页
     private Integer totalPage;
 
-    // totalCount:总共totalCount个question
+    // 初始化pagination
     public void setPagination(Integer totalPage, Integer page) {
         this.totalPage=totalPage;
         this.page=page;

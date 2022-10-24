@@ -1,7 +1,6 @@
 package life.majiang.community.controller;
 
 import life.majiang.community.mapper.QuestionMapper;
-import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.Question;
 import life.majiang.community.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -19,8 +17,6 @@ public class PublishController {
 
     @Autowired
     private QuestionMapper questionMapper;
-    @Autowired
-    private UserMapper userMapper;
 
     // get请求，通过该方法来处理，作用初步定为渲染页面（通过浏览器输入链接直接访问/a标签跳转时，是get请求）
     @GetMapping("/publish")
@@ -51,22 +47,21 @@ public class PublishController {
             model.addAttribute("error","标签不能为空");
             return "publish";
         }
-        User user=null;
-
-        /*这里后续是否能改进为从session获取*/
-        Cookie[] cookies = request.getCookies();
-        if(cookies!=null&&cookies.length!=0){
-            for(Cookie cookie:cookies){
-                if(cookie.getName().equals("token")){
-                    String token=cookie.getValue();
-                    user=userMapper.findByToken(token);
-                    if(user!=null){
-                        request.getSession().setAttribute("user",user);
-                    }
-                    break;
-                }
-            }
-        }
+//        /*这里后续是否能改进为从session获取*/
+//        Cookie[] cookies = request.getCookies();
+//        if(cookies!=null&&cookies.length!=0){
+//            for(Cookie cookie:cookies){
+//                if(cookie.getName().equals("token")){
+//                    String token=cookie.getValue();
+//                    user=userMapper.findByToken(token);
+//                    if(user!=null){
+//                        request.getSession().setAttribute("user",user);
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+        User user = (User) request.getSession().getAttribute("user");
 
         /*这里后续是否能改进为：未登录用户则无法进入发布问题页面（直接通过url也无法访问）*/
         if(user==null){

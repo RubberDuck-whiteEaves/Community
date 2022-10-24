@@ -25,6 +25,7 @@ public class QuestionService {
     public PaginationDTO list(Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalPage;
+        // totalCount:总共totalCount个question
         Integer totalCount = questionMapper.count();
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
@@ -56,6 +57,7 @@ public class QuestionService {
     public PaginationDTO list(Integer userID, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalPage;
+        // totalCount:总共totalCount个question
         Integer totalCount = questionMapper.countByUserID(userID);
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
