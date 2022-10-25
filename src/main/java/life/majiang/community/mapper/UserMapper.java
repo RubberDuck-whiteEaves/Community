@@ -4,6 +4,7 @@ import life.majiang.community.model.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 
 @Mapper
@@ -18,4 +19,10 @@ public interface UserMapper {
 
     @Select("select * from user_info where id=#{id}")
     User findByID(Integer id);
+
+    @Select("select * from user_info where account_id=#{accountID}")
+    User findByAccountID(String accountID);
+
+    @Update("update user_info set name = #{name}, token = #{token}, gmt_modified=#{gmtModified}, avatar_url=#{avatarURL} where id=#{id}")
+    void update(User dbUser);
 }

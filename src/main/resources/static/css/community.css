@@ -26,3 +26,9 @@ body{
 .profile .section {
     margin-top: 15px;
 }
+
+.community-menu{
+    color: #999;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
