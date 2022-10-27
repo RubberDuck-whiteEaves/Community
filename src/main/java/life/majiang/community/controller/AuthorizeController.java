@@ -60,10 +60,10 @@ public class AuthorizeController {
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setName(githubUser.getName());
-            user.setAccountID(String.valueOf(githubUser.getId()));
+            user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
-            user.setAvatarURL(githubUser.getAvatarURL());
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             // 插入数据库的过程，相当于写入了session，即把"session"持久化了（用DB对实物的存储，代替了session的写入），则后续不必在写入session了
             userService.createOrUpdate(user);
             // 这里光使用session来验证登陆是不可取的：
