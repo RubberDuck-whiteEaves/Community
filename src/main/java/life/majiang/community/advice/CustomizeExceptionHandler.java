@@ -30,8 +30,11 @@ public class CustomizeExceptionHandler {
             // 返回json
             ResultDTO resultDTO;
             if (e instanceof CustomizeException) {
+                // 手动编写throw出的CustomizeException异常
+                // 如throw new CustomizeException(CustomizeErrorCode.QUSETION_NOT_FOUND);
                 resultDTO = ResultDTO.errorOf((CustomizeException) e);
             } else {
+                // 手动编写throw出的非CustomizeException异常，或者非手动编写throw出的异常（如代码逻辑错误throw出的异常，一些调用函数内部自带的异常等）
                 resultDTO = ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROR);
             }
             try {
