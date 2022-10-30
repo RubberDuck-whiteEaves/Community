@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.Map;
 
+// 非后端抛出的异常在此处处理，跳转到error页
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
 public class CustomizeErrorController implements ErrorController {
