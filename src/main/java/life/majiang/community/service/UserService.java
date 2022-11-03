@@ -35,6 +35,7 @@ public class UserService {
 //            dbUser.setName(user.getName());
 //            dbUser.setToken(user.getToken());
             User updateUser=new User();
+            updateUser.setId(users.get(0).getId());
             updateUser.setGmtModified(System.currentTimeMillis());
             updateUser.setAvatarUrl(user.getAvatarUrl());
             updateUser.setName(user.getName());
