@@ -2,6 +2,7 @@
  * 提交回复
  */
 function post() {
+    // 获取id为question_id标签的value值
     var questionId = $("#question_id").val();
     var content = $("#comment_content").val();
     comment2target(questionId, 1, content);
@@ -13,6 +14,7 @@ function comment2target(targetId, type, content) {
         return;
     }
 
+    // 通过post方法发送json对象
     $.ajax({
         type: "POST",
         url: "/comment",
@@ -26,6 +28,7 @@ function comment2target(targetId, type, content) {
         // response为ajax请求后，返回的服务器响应
         success: function (response) {
             if (response.code == 200) {
+                // 界面进行实时刷新
                 window.location.reload();
             } else {
                 if (response.code == 2003) {
@@ -80,6 +83,8 @@ function collapseComments(e) {
             e.classList.add("active");
         } else {
             $.getJSON("/comment/" + id, function (data) {
+                // 由于获取到的data，即comments是按创建时间顺序排列的，但是每个标签都被prepend在最前面，则会产生一种倒序的效果
+                // 为了还是按创建时间顺序排列，所以需要将data reverse
                 $.each(data.data.reverse(), function (index, comment) {
                     var mediaLeftElement = $("<div/>", {
                         "class": "media-left"
@@ -93,14 +98,12 @@ function collapseComments(e) {
                     }).append($("<h5/>", {
                         "class": "media-heading",
                         "html": comment.user.name
+                    })).append($("<span/>", {
+                        "class": "menu pull-right",
+                        "html": moment(comment.gmtCreate).format('YYYY-MM-DD')
                     })).append($("<div/>", {
                         "html": comment.content
-                    })).append($("<div/>", {
-                        "class": "menu"
-                    }).append($("<span/>", {
-                        "class": "pull-right",
-                        "html": moment(comment.gmtCreate).format('YYYY-MM-DD')
-                    })));
+                    }));
 
                     var mediaElement = $("<div/>", {
                         "class": "media"
@@ -110,6 +113,8 @@ function collapseComments(e) {
                         "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 comments"
                     }).append(mediaElement);
 
+
+                    // subCommentContainer.prepend(c);
                     subCommentContainer.prepend(commentElement);
                 });
                 //展开二级评论
