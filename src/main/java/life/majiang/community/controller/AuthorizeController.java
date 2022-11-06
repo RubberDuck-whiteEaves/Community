@@ -40,7 +40,7 @@ public class AuthorizeController {
     // 调用方法发送accessToken获取githubUser
     // 如果githubUser非空，将user写入
     // 如果githubUser为空，则登陆失败
-    @GetMapping("callback")
+    @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code,
                            @RequestParam(name="state") String state,
                            HttpServletResponse response){

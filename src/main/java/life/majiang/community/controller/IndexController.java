@@ -22,7 +22,7 @@ public class IndexController {
     public String index(HttpServletRequest request,
                         Model model,
                         @RequestParam(name="page",defaultValue = "0") Integer page,
-                        @RequestParam(name="size",defaultValue = "2") Integer size){
+                        @RequestParam(name="size",defaultValue = "6") Integer size){
         // 首页中的逻辑：获取cookie中的token，在数据库中查询token是否存在，如果存在，则已经登陆成功，不会每次刷新首页都要求重新登陆
         // 同时将user写入session，使得前端可以通过session来决定是展示个人信息还是登陆
         // 设置cookie是服务器通过response设置的，获取cookie是在浏览器发送给服务器的request请求中获取的

@@ -28,6 +28,7 @@ public class QuestionController {
     public String question(@PathVariable(name = "id") Long id,
                            Model model){
         QuestionDTO questionDTO=questionService.getById(id);
+        List<QuestionDTO> relatedQuestions=questionService.selectRelated(questionDTO);
 
         List<CommentDTO> comments=commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
         // 累加阅读数
@@ -35,6 +36,7 @@ public class QuestionController {
         questionDTO.setViewCount(questionDTO.getViewCount()+1);
         model.addAttribute("question",questionDTO);
         model.addAttribute("comments",comments);
+        model.addAttribute("relatedQuestions",relatedQuestions);
         // 对问题发送评论的post请求不会在这里处理，所以这里的return "question"与发送post请求后页面刷新无关
         return "question";
     }
