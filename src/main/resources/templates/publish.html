@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/community.css">
     <script src="/js/jquery-3.6.1.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/community.js" type="application/javascript"></script>
 </head>
 <body>
 <div th:replace="navigation::nav"></div>
@@ -20,21 +21,60 @@
                 <input type="hidden" name="id" th:value="${id}">
                 <div class="form-group">
                     <label for="title">问题标题（简单扼要）:</label>
-                    <input type="text" class="form-control" th:value="${title}" id="title" name="title" placeholder="问题标题...">
+                    <input type="text" class="form-control" th:value="${title}" id="title" name="title"
+                           placeholder="问题标题...">
                 </div>
                 <div class="form-group">
                     <label for="description">问题补充(必填，请参照右侧提示) :</label>
-                    <textarea name="description" id="description" th:text="${description}" class="form-control" cols="30" rows="10"></textarea>
+                    <textarea name="description" id="description" th:text="${description}" class="form-control"
+                              cols="30" rows="10"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="tag">添加标签:</label>
-                    <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag" placeholder="输入标签，以，号分隔">
+                    <input type="text" class="form-control" th:value="${tag}" id="tag" name="tag"
+                           autocomplete="off"
+                           placeholder="输入标签，以，号分隔"
+                           onclick="showSelectTag()">
+                    <div id="select-tag" class="publish-tag-tab">
+                        <ul class="nav nav-tabs" role="tablist">
+<!--                            使用 th:each可以从迭代变量中直接获取一个当前迭代的迭代状态，称为迭代状态变量，在 th:each 属性中通过在变量 selectCategory 之后直接写其名称来定义，⽤逗号分隔-->
+<!--                            如果没有显式地设置状态变量，则 Thymeleaf 将始终创建⼀个默认的迭代变量，该状态迭代变量名称为：迭代变量+“Stat”-->
+<!--                            迭代状态变量有7个属性：-->
+<!--                            1）index 属性：当前迭代索引，从0开始-->
+<!--                            2）count 属性：当前的迭代计数，从1开始-->
+<!--                            3）size 属性：迭代变量中元素的总量-->
+<!--                            4）current 属性：每次迭代的 iter 变量，即当前遍历到的元素-->
+<!--                            5）even/odd 布尔属性：当前的迭代是偶数还是奇数。-->
+<!--                            6）first 布尔属性：当前的迭代是否是第⼀个迭代-->
+<!--                            7）last 布尔属性：当前的迭代是否是最后⼀个迭代。-->
+                            <li role="presentation" th:each="selectCategory,selectCategoryStat: ${tags}"
+                                th:class="${selectCategoryStat.first ? 'active':''}">
+                                <a th:href="${'#'+selectCategory.categoryName}" aria-controls="home" role="tab"
+                                   data-toggle="tab" th:text="${selectCategory.categoryName}"></a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" th:id="${selectCategory.categoryName}"
+                                 th:each="selectCategory: ${tags}"
+                                 th:class="${selectCategoryStat.first ? 'active tab-pane':'tab-pane'}">
+                                <span>
+                                    <span th:each="selectTag: ${selectCategory.tags}">
+                                    <span class="community-tag" onclick="selectTag(this)"
+                                          th:data-tag="${selectTag}"
+                                          th:text="${' '+selectTag}">
+                                    </span>
+                                </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
                 <label class="alert alert-danger" th:if="${error!=null}" th:text="${error}"></label>
                 <button type="submit" class="btn btn-success btn-publish">发布</button>
             </form>
         </div>
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <h3>问题发起指南</h3>
             • 问题标题:请用精简的语言描述您发布的问题 <br>
             • 问题补充:详细补充您的问题内容 <br>

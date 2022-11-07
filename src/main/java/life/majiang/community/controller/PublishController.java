@@ -1,9 +1,11 @@
 package life.majiang.community.controller;
 
+import life.majiang.community.cache.TagCache;
 import life.majiang.community.dto.QuestionDTO;
 import life.majiang.community.model.Question;
 import life.majiang.community.model.User;
 import life.majiang.community.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +23,8 @@ public class PublishController {
 
     // get请求，通过该方法来处理，作用初步定为渲染页面（通过浏览器输入链接直接访问/a标签跳转时，是get请求）
     @GetMapping("/publish")
-    public String publish(){
+    public String publish(Model model){
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
@@ -36,6 +39,7 @@ public class PublishController {
         model.addAttribute("title",title);
         model.addAttribute("description",description);
         model.addAttribute("tag",tag);
+        model.addAttribute("tags",TagCache.get());
         // 这三个对文本框内容的检测需要同时在前端用js且后端用逻辑代码实现，因为前端可能会绕过验证
         if(title==null||title.equals("")){
             model.addAttribute("error","标题不能为空");
@@ -49,6 +53,12 @@ public class PublishController {
             model.addAttribute("error","标签不能为空");
             return "publish";
         }
+        String invalid = TagCache.filterInvalid(tag);
+        if(StringUtils.isNotBlank(invalid)){
+            model.addAttribute("error","输入非法标签: "+invalid);
+            return "publish";
+        }
+
 //        /*这里后续是否能改进为从session获取*/
 //        Cookie[] cookies = request.getCookies();
 //        if(cookies!=null&&cookies.length!=0){
@@ -89,6 +99,9 @@ public class PublishController {
         model.addAttribute("description",question.getDescription());
         model.addAttribute("tag",question.getTag());
         model.addAttribute("id",id);
+        // 用TagCache将标签库写死了，不存在新增和删除的问题，因此不用涉及数据库，逻辑是通过cache去获取DTO
+        // service的逻辑是通过service去使用mapper获取model，再组装成DTO返回，以此获得DTO
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 }

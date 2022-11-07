@@ -131,18 +131,21 @@ function showSelectTag() {
     $("#select-tag").show();
 }
 
+// 通过js控制，在前端选择某个tag后，可以添加到input标签的value中
 function selectTag(e) {
     var value = e.getAttribute("data-tag");
+    // 获取id=tag标签（即publish.html中input标签）的值
     var previous = $("#tag").val();
 
     if (previous) {
+        // 若previous!=null，即标签中存在初值，则在初值后面append value
         var index = 0;
-        var appear = false; //记录value是否已经作为一个独立的标签出现过
+        var appear = false; // 记录value是否已经作为一个独立的标签出现过
         while (true) {
-            index = previous.indexOf(value, index); //value字符串在previous中出现的位置
+            index = previous.indexOf(value, index); // value字符串在previous中出现的位置
             if (index == -1) break;
-            //判断previous中出现的value是否是另一个标签的一部分
-            //即value的前一个和后一个字符都是逗号","或者没有字符时，才说明value是一个独立的标签
+            // 判断previous中出现的value是否是另一个标签的一部分
+            // 即value的前一个和后一个字符都是逗号","或者没有字符时，才说明value是一个独立的标签
             if ((index == 0 || previous.charAt(index - 1) == ",")
                 && (index + value.length == previous.length || previous.charAt(index + value.length) == ",")
             ) {
@@ -152,11 +155,12 @@ function selectTag(e) {
             index++; //用于搜索下一个出现位置
         }
         if (!appear) {
-            //若value没有作为一个独立的标签出现过
+            // 若value没有作为一个独立的标签出现过
             $("#tag").val(previous + ',' + value);
         }
     }
     else {
+        // 否则直接在id=tag标签后面append value
         $("#tag").val(value);
     }
 }
