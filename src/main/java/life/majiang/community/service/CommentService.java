@@ -79,6 +79,7 @@ public class CommentService {
             if(question==null){
                 throw new CustomizeException(CustomizeErrorCode.QUSETION_NOT_FOUND);
             }
+            comment.setCommentCount(0);
             commentMapper.insertSelective(comment);
             /*这里肯定不完善，因为其实上面这个回复评论的if分支也应该为问题的comment count加1*/
             question.setId(comment.getParentId());
@@ -91,6 +92,9 @@ public class CommentService {
     }
 
     private void createNotify(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationType, Long outerId) {
+        if (receiver == comment.getCommentator()) {
+            return;
+        }
         Notification notification = new Notification();
         notification.setGmtCreate(System.currentTimeMillis());
         notification.setType(notificationType.getType());

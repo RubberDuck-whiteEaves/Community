@@ -113,11 +113,11 @@
                                      th:src="${session.user != null ? session.user.avatarUrl : '/images/default-avatar.png'}">
                             </a>
                         </div>
-                        <!--                        <div class="media-body">-->
-                        <!--                            <h5 class="media-heading">-->
-                        <!--                                <span th:text="${session.user != null ? session.user.name : '匿名用户'}"></span>-->
-                        <!--                            </h5>-->
-                        <!--                        </div>-->
+                        <div class="media-body">
+                            <h5 class="media-heading">
+                                <span th:text="${session.user != null ? session.user.name : '匿名用户'}"></span>
+                            </h5>
+                        </div>
                     </div>
                     <input type="hidden" id="question_id" th:value="${question.id}">
                     <textarea class="form-control comment" rows="6" id="comment_content"></textarea>
