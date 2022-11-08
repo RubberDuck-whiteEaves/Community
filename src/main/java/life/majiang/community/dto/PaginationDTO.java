@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class PaginationDTO {
-    private List<QuestionDTO> questions;
+public class PaginationDTO<T> {
+    private List<T> data;
     // 是否显示上一页的icon(<)
     private boolean showPrevious;
     // 是否显示回到第一页的icon(<<)
