@@ -19,10 +19,10 @@ public class IndexController {
     // page:当前页码
     // size:一页size条question
     @GetMapping("/")
-    public String index(HttpServletRequest request,
-                        Model model,
+    public String index(Model model,
                         @RequestParam(name="page",defaultValue = "0") Integer page,
-                        @RequestParam(name="size",defaultValue = "6") Integer size){
+                        @RequestParam(name="size",defaultValue = "6") Integer size,
+                        @RequestParam(name="search",required = false) String search){
         // 首页中的逻辑：获取cookie中的token，在数据库中查询token是否存在，如果存在，则已经登陆成功，不会每次刷新首页都要求重新登陆
         // 同时将user写入session，使得前端可以通过session来决定是展示个人信息还是登陆
         // 设置cookie是服务器通过response设置的，获取cookie是在浏览器发送给服务器的request请求中获取的
@@ -41,8 +41,9 @@ public class IndexController {
 //            }
 //        }
 
-        PaginationDTO pagination=questionService.list(page,size);
+        PaginationDTO pagination=questionService.list(search,page,size);
         model.addAttribute("pagination",pagination);
+        model.addAttribute("search", search);
         return "index";
     }
 }
