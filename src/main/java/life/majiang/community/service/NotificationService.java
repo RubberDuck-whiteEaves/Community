@@ -49,7 +49,8 @@ public class NotificationService {
         Integer offset = size * (page - 1);
         NotificationExample example = new NotificationExample();
         example.createCriteria().andReceiverEqualTo(userId);
-        example.setOrderByClause("gmt_create desc");
+        // 这里做到了未读的评论优先级最高
+        example.setOrderByClause("status, gmt_create desc");
         List<Notification> notifications = notificationMapper.selectByExampleWithRowbounds(example,new RowBounds(offset, size));
         if(notifications.size()==0){
             return paginationDTO;
