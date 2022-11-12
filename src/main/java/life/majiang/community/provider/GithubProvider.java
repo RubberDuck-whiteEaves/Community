@@ -31,6 +31,7 @@ public class GithubProvider {
             return token;
         } catch (Exception e) {
             // 防止获取到的string格式无法进行上述的split而出错
+            System.out.println(99999999);
             e.printStackTrace();
         }
         return null;
